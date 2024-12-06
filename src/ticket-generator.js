@@ -1,66 +1,59 @@
-const path = require('path');
-const fs = require('fs');
-const PDFDocument = require('pdfkit');
+// const path = require('path');
+// const fs = require('fs');
+// const PDFDocument = require('pdfkit');
 
-/**
- * Generate a movie ticket PDF by overlaying dynamic data
- * @param {Object} data - The dynamic data to overlay on the ticket.
- * @param {Object} res - The HTTP response object.
- */
-function generateTicket(data, res) {
-    try {
-        // Image dimensions (in pixels)
-        const imageWidthPx = 2000; // Width in pixels
-        const imageHeightPx = 647; // Height in pixels
+// /**
+//  * Generate a movie ticket PDF by overlaying dynamic data
+//  * @param {Object} data - The dynamic data to overlay on the ticket.
+//  * @param {Object} res - The HTTP response object.
+//  */
+// function generateTicket(data, res) {
+//     try {
+//         // Template image dimensions (1500x750 pixels)
+//         const imageWidthPt = 1500; // Width in points
+//         const imageHeightPt = 750; // Height in points (matches the 2:1 aspect ratio)
 
-        // Convert pixels to points (assuming 1px = 1pt for 72 DPI)
-        const imageWidthPt = imageWidthPx;
-        const imageHeightPt = imageHeightPx;
+//         const doc = new PDFDocument({
+//             size: [imageWidthPt, imageHeightPt], // Set PDF size to match template size
+//             layout: 'landscape', // Landscape layout to match the 2:1 aspect ratio
+//         });
 
-        const doc = new PDFDocument({
-            size: [imageWidthPt, imageHeightPt], // Set PDF size to image size
-            layout: 'portrait',
-        });
+//         // Set the response header for PDF
+//         res.setHeader('Content-Type', 'application/pdf');
+//         res.setHeader('Content-Disposition', 'inline; filename="movie_ticket.pdf"');
 
-        // Set the response header for PDF
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'inline; filename="movie_ticket.pdf"'); // Optional
+//         // Stream the PDF to the response
+//         doc.pipe(res);
 
-        // Stream the PDF to the response
-        doc.pipe(res);
+//         // Load the template image
+//         const templatePath = path.resolve(__dirname, '../templates/date.png');
+//         if (fs.existsSync(templatePath)) {
+//             // Position the image as the background
+//             doc.image(templatePath, 0, 0, { width: imageWidthPt, height: imageHeightPt });
+//         } else {
+//             console.warn('Template not found:', templatePath);
+//         }
 
-        // Load the template image
-        const templatePath = path.resolve(__dirname, '../templates/movie_ticket.png');
-        if (fs.existsSync(templatePath)) {
-            // Calculate the scaling for the image to fit the page size
-            const scaledWidth = imageWidthPt; // Use the full width of the PDF
-            const scaledHeight = imageHeightPt; // Use the full height of the PDF
+//         // Overlay dynamic data on the image
+//         doc.font('Helvetica-Bold').fillColor('white'); // Set font and color
 
-            // Position the image at the top left corner
-            doc.image(templatePath, 0, 0, { width: scaledWidth, height: scaledHeight });
-        } else {
-            console.warn('Template not found:', templatePath);
-        }
+//         // Adjust text positions based on the 1500x750 image
+//         doc.fontSize(40).text(`${data.movie || 'N/A'}`, 100, 50, { width: 1300, align: 'center' }); // Movie title
 
-        // Overlay dynamic data
-       // Set font size and color
-       const fixedWidth = 400;
-doc.fontSize(155.5).fillColor('white'); // Set the color to white
-// Add text with dynamic content
-doc.text(`${data.movie || 'N/A'}`, 607.36, 263.36);
-doc.fontSize(10);
-doc.text(`Date & Time: ${data.date || 'N/A'} at ${data.time || 'N/A'}`, 50, 180);
-doc.text(`Theater: ${data.theater || 'N/A'}`, 50, 210);
-doc.text(`Tickets: ${data.tickets || 'N/A'}`, 50, 240);
-doc.text(`Amount: $${data.amount || 'N/A'}`, 50, 270);
+//         doc.fontSize(20);
+//         doc.text(`Date & Time: ${data.date || 'N/A'} at ${data.time || 'N/A'}`, 50, 650); // Date and time
+//         doc.text(`Theater: ${data.theater || 'N/A'}`, 50, 700); // Theater details
 
-// Finalize the PDF
-doc.end();
+//         doc.text(`Tickets: ${data.tickets || 'N/A'}`, 800, 650); // Tickets
+//         doc.text(`Amount: $${data.amount || 'N/A'}`, 800, 700); // Amount
 
-    } catch (error) {
-        console.error('Error generating ticket:', error);
-        res.status(500).send('Error generating ticket');
-    }
-}
+//         // Finalize the PDF
+//         doc.end();
 
-module.exports = { generateTicket };
+//     } catch (error) {
+//         console.error('Error generating ticket:', error);
+//         res.status(500).send('Error generating ticket');
+//     }
+// }
+
+// module.exports = { generateTicket };

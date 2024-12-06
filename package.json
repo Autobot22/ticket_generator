@@ -11,7 +11,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^4.21.1",
+    "canvas": "^2.11.2",
+    "express": "^4.21.2",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
     "pdf-lib": "^1.17.1",
     "pdfkit": "^0.15.1",
     "sharp": "^0.33.5"
