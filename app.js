@@ -17,7 +17,7 @@ app.post('/generate-ticket', (req, res) => {
         const { movieName, address, date, time, number, id } = req.body;
 
         // Path to the template image
-        const templatePath = path.resolve(__dirname, '../movie_ticket_generator/templates/date.png');
+        const templatePath = path.resolve(__dirname, '../templates/date.png');
         
         // Debug: Log the resolved image path
         console.log('Template image path:', templatePath);
