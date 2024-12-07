@@ -55,8 +55,10 @@ app.post('/generate-ticket', (req, res) => {
         doc.text(`${movieName || 'N/A'}`, 240, 90);
 
         // Add Address (Bold)
-        doc.font('Helvetica-Bold').fontSize(30);
-        doc.text(`${address || 'N/A'}`, 125, 225);
+        doc.font('Helvetica-Bold').fontSize(26);
+        const maxWidth = 1000; // Adjust the width as needed
+
+        doc.text(`${address || 'N/A'}`, 125, 225, { width: maxWidth, align: 'left' });
 
         // **Font Settings for Other Data (Regular)**
         doc.font('Helvetica').fontSize(28); // Regular font size and weight
