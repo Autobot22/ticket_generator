@@ -2,9 +2,13 @@ const express = require('express');
 const PDFDocument = require('pdfkit');
 const path = require('path');
 const fs = require('fs');
+const bodyParser = require('body-parser');
 
 const app = express();
-app.use(express.json());
+
+// Middleware to parse JSON and URL-encoded request bodies
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serve static files from the "output" directory
 app.use('/output', express.static(path.resolve(__dirname, 'output')));
